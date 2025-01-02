@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Quiz Game</title>
+    <title>Enhanced Order Quiz Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            background-color: #f5f5f5;
         }
         .question {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 20px;
         }
         .answers {
@@ -20,17 +21,36 @@
             gap: 10px;
         }
         .answers button {
-            padding: 10px;
-            font-size: 16px;
+            padding: 10px 15px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .answers button:hover {
+            background-color: #ddd;
+        }
+        .answers button.disabled {
+            background-color: grey;
+            color: white;
+            cursor: not-allowed;
         }
         #result {
             margin-top: 20px;
             font-size: 18px;
+            color: red;
+        }
+        #timer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: green;
         }
     </style>
 </head>
 <body>
-    <h1>Order Quiz Game</h1>
+    <h1>Enhanced Order Quiz Game</h1>
     <div id="game">
         <div class="question" id="question"></div>
         <div class="answers" id="answers"></div>
@@ -41,13 +61,17 @@
 
     <script>
         const questions = [
-            { question: "Arrange these letters alphabetically:", answers: ["D", "B", "A", "C"], correctOrder: ["A", "B", "C", "D"] },
-            { question: "Arrange numbers in ascending order:", answers: ["3", "1", "4", "2"], correctOrder: ["1", "2", "3", "4"] },
-            // Add 18 more sample questions
+            { question: "Arrange countries by land area (largest to smallest):", answers: ["Russia", "Canada", "China", "USA"], correctOrder: ["Russia", "Canada", "China", "USA"] },
+            { question: "Order these cities by population (largest to smallest):", answers: ["Tokyo", "Delhi", "Shanghai", "São Paulo"], correctOrder: ["Tokyo", "Delhi", "Shanghai", "São Paulo"] },
+            { question: "Arrange these planets by size (largest to smallest):", answers: ["Jupiter", "Saturn", "Earth", "Mars"], correctOrder: ["Jupiter", "Saturn", "Earth", "Mars"] },
+            { question: "Order these programming languages alphabetically:", answers: ["Python", "JavaScript", "C++", "Java"], correctOrder: ["C++", "Java", "JavaScript", "Python"] },
+            { question: "Arrange these colors by the rainbow sequence:", answers: ["Blue", "Green", "Red", "Yellow"], correctOrder: ["Red", "Green", "Yellow", "Blue"] },
+            { question: "Order these numbers in ascending order:", answers: ["42", "7", "99", "21"], correctOrder: ["7", "21", "42", "99"] },
+            // Add 24 more creative questions below
         ];
 
-        while (questions.length < 20) {
-            const randomNumbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10));
+        while (questions.length < 30) {
+            const randomNumbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 100));
             const sortedNumbers = [...randomNumbers].sort((a, b) => a - b);
             questions.push({
                 question: "Arrange these numbers in ascending order:",
@@ -69,6 +93,7 @@
             questionData.answers.forEach((answer, index) => {
                 const button = document.createElement('button');
                 button.innerText = answer;
+                button.dataset.key = ['A', 'F', 'J', 'L'][index];
                 button.onclick = () => addToOrder(answer, button);
                 answersContainer.appendChild(button);
             });
@@ -79,7 +104,16 @@
 
         function addToOrder(answer, button) {
             userOrder.push(answer);
+            button.classList.add('disabled');
             button.disabled = true;
+        }
+
+        function resetButtons() {
+            const buttons = document.querySelectorAll('#answers button');
+            buttons.forEach(button => {
+                button.classList.remove('disabled');
+                button.disabled = false;
+            });
         }
 
         function checkAnswer() {
@@ -95,6 +129,7 @@
                 }
             } else {
                 document.getElementById('result').innerText = 'Incorrect! Try again.';
+                resetButtons();
             }
         }
 
@@ -102,6 +137,17 @@
             const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
             document.getElementById('timer').innerText = `Time: ${elapsedTime}s`;
         }
+
+        document.addEventListener('keydown', (event) => {
+            const keyMap = { 'A': 0, 'F': 1, 'J': 2, 'L': 3 };
+            const index = keyMap[event.key.toUpperCase()];
+            if (index !== undefined) {
+                const buttons = document.querySelectorAll('#answers button');
+                if (buttons[index] && !buttons[index].disabled) {
+                    buttons[index].click();
+                }
+            }
+        });
 
         setInterval(updateTimer, 100);
         loadQuestion();
