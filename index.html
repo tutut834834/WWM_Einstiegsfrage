@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .answers {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .answers button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Quiz Game</h1>
+    <div id="game">
+        <div class="question" id="question"></div>
+        <div class="answers" id="answers"></div>
+        <button id="submit" onclick="checkAnswer()">Submit</button>
+        <div id="result"></div>
+        <div id="timer">Time: 0s</div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "Arrange these letters alphabetically:", answers: ["D", "B", "A", "C"], correctOrder: ["A", "B", "C", "D"] },
+            { question: "Arrange numbers in ascending order:", answers: ["3", "1", "4", "2"], correctOrder: ["1", "2", "3", "4"] },
+            // Add 18 more sample questions
+        ];
+
+        while (questions.length < 20) {
+            const randomNumbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10));
+            const sortedNumbers = [...randomNumbers].sort((a, b) => a - b);
+            questions.push({
+                question: "Arrange these numbers in ascending order:",
+                answers: randomNumbers.map(String),
+                correctOrder: sortedNumbers.map(String),
+            });
+        }
+
+        let currentQuestionIndex = 0;
+        let userOrder = [];
+        let startTime = Date.now();
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestionIndex];
+            document.getElementById('question').innerText = questionData.question;
+            const answersContainer = document.getElementById('answers');
+            answersContainer.innerHTML = '';
+
+            questionData.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.innerText = answer;
+                button.onclick = () => addToOrder(answer, button);
+                answersContainer.appendChild(button);
+            });
+
+            userOrder = [];
+            document.getElementById('result').innerText = '';
+        }
+
+        function addToOrder(answer, button) {
+            userOrder.push(answer);
+            button.disabled = true;
+        }
+
+        function checkAnswer() {
+            const questionData = questions[currentQuestionIndex];
+            if (JSON.stringify(userOrder) === JSON.stringify(questionData.correctOrder)) {
+                if (currentQuestionIndex === 9) {
+                    const endTime = Date.now();
+                    const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
+                    document.getElementById('game').innerHTML = `<h2>Game Complete!</h2><p>Your time: ${timeTaken} seconds</p>`;
+                } else {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+            } else {
+                document.getElementById('result').innerText = 'Incorrect! Try again.';
+            }
+        }
+
+        function updateTimer() {
+            const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
+            document.getElementById('timer').innerText = `Time: ${elapsedTime}s`;
+        }
+
+        setInterval(updateTimer, 100);
+        loadQuestion();
+    </script>
+</body>
+</html>
