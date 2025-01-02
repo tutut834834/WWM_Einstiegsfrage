@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Order Quiz Game</title>
+    <title>Erweitertes Reihenfolge-Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,42 +50,36 @@
     </style>
 </head>
 <body>
-    <h1>Enhanced Order Quiz Game</h1>
+    <h1>Erweitertes Reihenfolge-Quiz</h1>
     <div id="game">
         <div class="question" id="question"></div>
         <div class="answers" id="answers"></div>
-        <button id="submit" onclick="checkAnswer()">Submit</button>
+        <button id="submit" onclick="checkAnswer()">Absenden</button>
         <div id="result"></div>
-        <div id="timer">Time: 0s</div>
+        <div id="timer">Zeit: 0s</div>
     </div>
 
     <script>
-        const questions = [
-            { question: "Arrange countries by land area (largest to smallest):", answers: ["Russia", "Canada", "China", "USA"], correctOrder: ["Russia", "Canada", "China", "USA"] },
-            { question: "Order these cities by population (largest to smallest):", answers: ["Tokyo", "Delhi", "Shanghai", "São Paulo"], correctOrder: ["Tokyo", "Delhi", "Shanghai", "São Paulo"] },
-            { question: "Arrange these planets by size (largest to smallest):", answers: ["Jupiter", "Saturn", "Earth", "Mars"], correctOrder: ["Jupiter", "Saturn", "Earth", "Mars"] },
-            { question: "Order these programming languages alphabetically:", answers: ["Python", "JavaScript", "C++", "Java"], correctOrder: ["C++", "Java", "JavaScript", "Python"] },
-            { question: "Arrange these colors by the rainbow sequence:", answers: ["Blue", "Green", "Red", "Yellow"], correctOrder: ["Red", "Green", "Yellow", "Blue"] },
-            { question: "Order these numbers in ascending order:", answers: ["42", "7", "99", "21"], correctOrder: ["7", "21", "42", "99"] },
-            // Add 24 more creative questions below
+        const allQuestions = [
+            { question: "Ordne die Länder nach Fläche (größte bis kleinste):", answers: ["Russland", "Kanada", "China", "USA"], correctOrder: ["Russland", "Kanada", "China", "USA"] },
+            { question: "Ordne diese Städte nach Bevölkerungsgröße (größte bis kleinste):", answers: ["Tokio", "Delhi", "Shanghai", "São Paulo"], correctOrder: ["Tokio", "Delhi", "Shanghai", "São Paulo"] },
+            { question: "Ordne die Planeten nach Größe (größte bis kleinste):", answers: ["Jupiter", "Saturn", "Erde", "Mars"], correctOrder: ["Jupiter", "Saturn", "Erde", "Mars"] },
+            { question: "Ordne diese Farben nach der Regenbogen-Reihenfolge:", answers: ["Blau", "Grün", "Rot", "Gelb"], correctOrder: ["Rot", "Gelb", "Grün", "Blau"] },
+            { question: "Ordne diese Zahlen aufsteigend:", answers: ["42", "7", "99", "21"], correctOrder: ["7", "21", "42", "99"] },
+            { question: "Ordne diese Sportarten alphabetisch:", answers: ["Fußball", "Basketball", "Schwimmen", "Tennis"], correctOrder: ["Basketball", "Fußball", "Schwimmen", "Tennis"] },
+            { question: "Ordne die Länder nach Einwohnerzahl (größte bis kleinste):", answers: ["China", "Indien", "USA", "Indonesien"], correctOrder: ["China", "Indien", "USA", "Indonesien"] },
+            // Add 93 more creative questions
         ];
 
-        while (questions.length < 30) {
-            const randomNumbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 100));
-            const sortedNumbers = [...randomNumbers].sort((a, b) => a - b);
-            questions.push({
-                question: "Arrange these numbers in ascending order:",
-                answers: randomNumbers.map(String),
-                correctOrder: sortedNumbers.map(String),
-            });
-        }
+        // Zufällig 10 Fragen auswählen
+        const selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
 
         let currentQuestionIndex = 0;
         let userOrder = [];
         let startTime = Date.now();
 
         function loadQuestion() {
-            const questionData = questions[currentQuestionIndex];
+            const questionData = selectedQuestions[currentQuestionIndex];
             document.getElementById('question').innerText = questionData.question;
             const answersContainer = document.getElementById('answers');
             answersContainer.innerHTML = '';
@@ -117,25 +111,25 @@
         }
 
         function checkAnswer() {
-            const questionData = questions[currentQuestionIndex];
+            const questionData = selectedQuestions[currentQuestionIndex];
             if (JSON.stringify(userOrder) === JSON.stringify(questionData.correctOrder)) {
                 if (currentQuestionIndex === 9) {
                     const endTime = Date.now();
                     const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
-                    document.getElementById('game').innerHTML = `<h2>Game Complete!</h2><p>Your time: ${timeTaken} seconds</p>`;
+                    document.getElementById('game').innerHTML = `<h2>Spiel beendet!</h2><p>Deine Zeit: ${timeTaken} Sekunden</p>`;
                 } else {
                     currentQuestionIndex++;
                     loadQuestion();
                 }
             } else {
-                document.getElementById('result').innerText = 'Incorrect! Try again.';
+                document.getElementById('result').innerText = 'Falsch! Versuche es noch einmal.';
                 resetButtons();
             }
         }
 
         function updateTimer() {
             const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-            document.getElementById('timer').innerText = `Time: ${elapsedTime}s`;
+            document.getElementById('timer').innerText = `Zeit: ${elapsedTime}s`;
         }
 
         document.addEventListener('keydown', (event) => {
