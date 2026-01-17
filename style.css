@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top, #1e3a8a, #020617);
+  color: white;
+}
+
+.app {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: #93c5fd;
+}
+
+.card {
+  background: #020617;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(0,0,0,.7);
+}
+
+.input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #cbd5e1;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.answer {
+  background: linear-gradient(180deg, #1e3a8a, #020617);
+  border: 2px solid #2563eb;
+  border-radius: 999px;
+  padding: 18px;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+}
+
+.answer:hover {
+  background: linear-gradient(180deg, #2563eb, #020617);
+}
+
+.answer.picked {
+  background: linear-gradient(180deg, #facc15, #a16207);
+  border-color: #fde047;
+  color: #111827;
+  font-weight: bold;
+}
+
+.answer:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#instant {
+  margin-top: 16px;
+  white-space: pre-line;
+  font-size: 18px;
+}
+
+#instant.good { color: #86efac; }
+#instant.bad { color: #fca5a5; }
+
+#result {
+  margin-top: 25px;
+  white-space: pre-line;
+  font-size: 18px;
+}
