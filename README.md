@@ -1,6 +1,6 @@
-Niko's Auswahlrunde-Quizz wie bei Wer wird Millionär? – Reihenfolge-Quiz mit Zeitmessung - zum Üben für Senior:innen
+Auswahlrunde-Quizz wie bei Wer wird Millionär? – Reihenfolge-Quiz mit Zeitmessung - zum Üben für Senior:innen
 
-
+Website: https://tutut834834.github.io/WWM_Einstiegsfrage/
 
 Ein interaktives, browserbasiertes Quiz im Stil von **„Wer wird Millionär?“**, bei dem Nutzer **Antworten in einer bestimmten Reihenfolge (A–D)** eingeben müssen.  
 Das Projekt ist **vollständig statisch**, benötigt **kein Backend** und eignet sich perfekt für **GitHub Pages**, Schule, Lehre oder schnelle Wissenstests.
