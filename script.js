@@ -1,4 +1,4 @@
-const QUESTIONS = [...QUESTION_BANK].sort(() => Math.random() - 0.5).slice(0, 10);
+const QUESTIONS = [...QUESTION_BANK].sort(() => Math.random() - 0.5).slice(0, 4);
 const LETTERS = ["A", "B", "C", "D"];
 
 let index = 0;
@@ -51,7 +51,7 @@ function pick(i) {
   btns[i].classList.add("picked");
   inputSeqEl.textContent = seq.map(i => LETTERS[i]).join(" ");
 
-  if (seq.length === 10) finishQuestion();
+  if (seq.length === 4) finishQuestion();
 }
 
 function finishQuestion() {
@@ -101,4 +101,5 @@ function finishQuiz() {
 }
 
 loadQuestion();
+
 
