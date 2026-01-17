@@ -1,4 +1,6 @@
-# 🕒 Order Quiz – Reihenfolge-Quiz mit Zeitmessung
+Niko's Auswahlrunde-Quizz wie bei Wer wird Millionär? – Reihenfolge-Quiz mit Zeitmessung - zum Üben für Senior:innen
+
+
 
 Ein interaktives, browserbasiertes Quiz im Stil von **„Wer wird Millionär?“**, bei dem Nutzer **Antworten in einer bestimmten Reihenfolge (A–D)** eingeben müssen.  
 Das Projekt ist **vollständig statisch**, benötigt **kein Backend** und eignet sich perfekt für **GitHub Pages**, Schule, Lehre oder schnelle Wissenstests.
