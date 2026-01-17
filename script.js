@@ -1,10 +1,8 @@
-const QUESTIONS = QUESTION_BANK;
 const LETTERS = ["A", "B", "C", "D"];
+const QUESTIONS = QUESTION_BANK;
 
 let index = 0;
 let score = 0;
-let times = [];
-let questionStart = 0;
 let picks = [];
 
 const titleEl = document.getElementById("questionTitle");
@@ -15,12 +13,10 @@ const nextBtn = document.getElementById("nextBtn");
 function start() {
   index = 0;
   score = 0;
-  times = [];
   loadQuestion();
 }
 
 function loadQuestion() {
-  questionStart = Date.now();
   feedbackEl.textContent = "";
   nextBtn.disabled = true;
   nextBtn.textContent = "Next";
@@ -28,66 +24,62 @@ function loadQuestion() {
   const q = QUESTIONS[index];
   titleEl.textContent = q.title;
   contentEl.innerHTML = "";
-
-  picks = new Array(4).fill(null);
+  picks = new Array(q.items.length).fill(null);
 
   q.items.forEach((item, row) => {
-    const r = document.createElement("div");
-    r.className = "order-row";
+    const block = document.createElement("div");
+    block.className = "order-row";
 
     const label = document.createElement("div");
     label.className = "order-item";
     label.textContent = item;
 
     const grid = document.createElement("div");
-    grid.className = "letter-grid";
+    grid.className = "answer-grid";
 
     LETTERS.forEach(letter => {
-      const b = document.createElement("button");
-      b.className = "letter-btn";
-      b.textContent = letter;
-      b.onclick = () => selectLetter(row, letter);
-      grid.appendChild(b);
+      const btn = document.createElement("div");
+      btn.className = "answer-btn";
+      btn.innerHTML = `<span class="letter">${letter}</span>`;
+      btn.onclick = () => choose(row, letter);
+      grid.appendChild(btn);
     });
 
-    r.appendChild(label);
-    r.appendChild(grid);
-    contentEl.appendChild(r);
+    block.appendChild(label);
+    block.appendChild(grid);
+    contentEl.appendChild(block);
   });
 
   updateMeta();
 }
 
-function selectLetter(row, letter) {
-  const usedElsewhere = picks.includes(letter) && picks[row] !== letter;
-  if (usedElsewhere) return;
+function choose(row, letter) {
+  if (picks.includes(letter) && picks[row] !== letter) return;
 
   picks[row] = picks[row] === letter ? null : letter;
-  refreshButtons();
+  refresh();
 }
 
-function refreshButtons() {
+function refresh() {
   const used = new Set(picks.filter(Boolean));
   const rows = document.querySelectorAll(".order-row");
 
   rows.forEach((row, r) => {
-    row.querySelectorAll(".letter-btn").forEach(btn => {
-      const l = btn.textContent;
+    row.querySelectorAll(".answer-btn").forEach(btn => {
+      const l = btn.querySelector(".letter").textContent;
       btn.classList.toggle("selected", picks[r] === l);
-      const disabled = used.has(l) && picks[r] !== l;
-      btn.classList.toggle("disabled", disabled);
-      btn.disabled = disabled;
+      const dis = used.has(l) && picks[r] !== l;
+      btn.classList.toggle("disabled", dis);
     });
   });
 
   nextBtn.disabled = !picks.every(p => p !== null);
-  nextBtn.onclick = checkAnswer;
+  nextBtn.onclick = check;
 }
 
-function checkAnswer() {
-  times.push((Date.now() - questionStart) / 1000);
-
+function check() {
   const q = QUESTIONS[index];
+
   const order = q.items
     .map((item, i) => ({ item, l: picks[i] }))
     .sort((a,b) => LETTERS.indexOf(a.l) - LETTERS.indexOf(b.l))
@@ -97,26 +89,14 @@ function checkAnswer() {
     score++;
     feedbackEl.textContent = "✅ Richtig";
   } else {
-    feedbackEl.textContent = "❌ Falsch\nRichtig: " + q.correctOrder.join(" → ");
+    feedbackEl.textContent =
+      "❌ Falsch\nRichtig: " + q.correctOrder.join(" → ");
   }
 
   index++;
+  nextBtn.textContent = "Finish";
+  nextBtn.onclick = () => {};
   updateMeta();
-
-  nextBtn.textContent = index === QUESTIONS.length ? "Finish" : "Next";
-  nextBtn.onclick = index === QUESTIONS.length ? finish : loadQuestion;
-}
-
-function finish() {
-  const total = times.reduce((a,b)=>a+b,0);
-  const avg = total / times.length;
-
-  titleEl.textContent = "🏁 Fertig";
-  contentEl.innerHTML = "";
-  feedbackEl.textContent =
-    `Score: ${score} / ${QUESTIONS.length}\n` +
-    `Gesamtzeit: ${total.toFixed(1)} s\n` +
-    `Durchschnitt: ${avg.toFixed(1)} s`;
 }
 
 function updateMeta() {
